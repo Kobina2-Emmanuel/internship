@@ -281,3 +281,22 @@ canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
   .capstack{height:110px}.cap h3{font-size:1rem}.cap p{font-size:.9rem}
 }
 @media print{.sidebar,.mobilebar,.progressbar,.scrim{display:none}.main{margin:0}.scrolly{height:auto}.sticky{position:static;height:auto}}
+
+/* ---------- splash screen ---------- */
+.splash{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px;background:radial-gradient(120% 90% at 20% 10%,#0f8a63,#084f39 55%,#06291f);color:#fff;text-align:center;transition:opacity .6s var(--ease),transform .7s var(--ease),visibility .6s;animation:splashAuto .5s 9s forwards}
+.splash.hide{opacity:0;transform:scale(1.06);visibility:hidden;pointer-events:none}
+@keyframes splashAuto{to{opacity:0;visibility:hidden;pointer-events:none}}
+.splash-card{display:grid;justify-items:center;gap:14px;max-width:30rem;perspective:800px}
+.splash-card h1{font-size:clamp(2rem,8vw,3.4rem)}
+.splash-card p{margin:0;opacity:.85}
+.splash-seq{display:flex;gap:10px;margin-bottom:10px;transform-style:preserve-3d}
+.splash-seq span{display:grid;place-items:center;width:clamp(52px,14vw,72px);aspect-ratio:1;border-radius:16px;background:var(--gold);color:#2b1d00;font-family:var(--f-head);font-weight:800;font-size:clamp(1.2rem,5vw,1.8rem);box-shadow:0 8px 0 #9a6a00;transform:rotateX(35deg);animation:splashTile .7s var(--ease) backwards}
+.splash-seq span:nth-child(2){animation-delay:.15s}.splash-seq span:nth-child(3){animation-delay:.3s}.splash-seq span:nth-child(4){animation-delay:.45s}.splash-seq span:nth-child(5){animation-delay:.6s}
+.splash-seq span:nth-child(even){background:#fff;box-shadow:0 8px 0 #9db0a8}
+@keyframes splashTile{from{opacity:0;transform:translateY(-60px) rotateX(80deg) scale(.6)}}
+.splash-bar{width:min(260px,70vw);height:8px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden;margin-top:8px}
+.splash-bar span{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(0);background:var(--gold);animation:splashFill 1.6s .3s var(--ease) forwards}
+@keyframes splashFill{to{transform:scaleX(1)}}
+.splash .btn:disabled{opacity:.55;cursor:wait}
+.splash-skip{border:0;background:none;color:#fff;opacity:.7;text-decoration:underline;min-height:44px;padding:0 16px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.splash-seq span,.splash-bar span{animation:none;transform:none}.splash-bar span{transform:scaleX(1)}}

@@ -11,6 +11,25 @@ const store = {
   get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
   set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} }
 };
+/* splash screen */
+const splash = $('#splash');
+function closeSplash() {
+  if (!splash || splash.classList.contains('hide')) return;
+  splash.classList.add('hide'); store.set('ap-splash', '1');
+  setTimeout(() => splash.remove(), 800);
+}
+if (splash) {
+  let seen = false; try { seen = sessionStorage.getItem('ap-splash-seen') === '1'; } catch (e) {}
+  if (seen) splash.remove();
+  else {
+    try { sessionStorage.setItem('ap-splash-seen', '1'); } catch (e) {}
+    const go = $('#splashGo');
+    setTimeout(() => { go.disabled = false; go.textContent = 'Start the lesson'; go.focus({ preventScroll: true }); }, reduce ? 200 : 1900);
+    go.addEventListener('click', closeSplash);
+    $('#splashSkip').addEventListener('click', closeSplash);
+    addEventListener('keydown', e => { if (e.key === 'Escape' || (e.key === 'Enter' && !go.disabled)) closeSplash(); });
+  }
+}
 const css = n => getComputedStyle(root).getPropertyValue(n).trim() || '#888';
 
 /* =========================================================

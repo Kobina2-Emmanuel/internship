@@ -6,6 +6,9 @@
 <title>Arithmetic Progression | Interactive Lesson</title>
 <meta name="description" content="An interactive Additional Mathematics lesson: from Prize-Giving Day chairs to the n-th term formula of an Arithmetic Progression.">
 <meta name="theme-color" content="#0b6e4f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,8 +18,19 @@
   /* apply saved theme before first paint to avoid a flash */
   try{var t=localStorage.getItem('ap-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
 </script>
+<script>function showErr(){var d=document.createElement("div");d.style.cssText="position:fixed;bottom:0;left:0;right:0;z-index:99;padding:14px;background:#c7372f;color:#fff;font:600 15px system-ui";var s=document.getElementById("splash");if(s)s.remove();d.textContent="Could not load main.js. Make sure main.js is in the same folder as index.html.";document.body.appendChild(d)}</script>
 </head>
 <body>
+<div class="splash" id="splash" role="dialog" aria-modal="true" aria-label="Welcome to the lesson">
+  <div class="splash-card">
+    <div class="splash-seq" aria-hidden="true"><span>4</span><span>7</span><span>10</span><span>13</span><span>16</span></div>
+    <h1>Arithmetic Progression</h1>
+    <p>Additional Mathematics &middot; a 60-minute interactive lesson</p>
+    <div class="splash-bar" aria-hidden="true"><span></span></div>
+    <button class="btn lg gold" id="splashGo" type="button" disabled>Loading&hellip;</button>
+    <button class="splash-skip" id="splashSkip" type="button">Skip</button>
+  </div>
+</div>
 
 <div class="progressbar" aria-hidden="true"><span id="progressFill"></span></div>
 
@@ -395,6 +409,5 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="window.__noThree=1"></script>
 <script src="main.js" onerror="showErr()"></script>
-<script>function showErr(){var d=document.createElement("div");d.style.cssText="position:fixed;bottom:0;left:0;right:0;z-index:99;padding:14px;background:#c7372f;color:#fff;font:600 15px system-ui";d.textContent="Could not load main.js. Make sure main.js is in the same folder as index.html.";document.body.appendChild(d)}</script>
 </body>
 </html>
