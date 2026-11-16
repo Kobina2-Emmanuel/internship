@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arithmetic Progression | Interactive Lesson</title>
+<meta name="description" content="An interactive Additional Mathematics lesson: from Prize-Giving Day chairs to the n-th term formula of an Arithmetic Progression.">
+<meta name="theme-color" content="#0b6e4f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+  /* apply saved theme before first paint to avoid a flash */
+  try{var t=localStorage.getItem('ap-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+</script>
+</head>
+<body>
+
+<div class="progressbar" aria-hidden="true"><span id="progressFill"></span></div>
+
+<header class="mobilebar">
+  <button class="iconbtn" id="menuBtn" aria-label="Open lesson menu" aria-expanded="false" aria-controls="sidebar">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <strong>Arithmetic Progression</strong>
+  <span class="pill" id="mobileProgress">0 / 7</span>
+</header>
+<div class="scrim" id="scrim"></div>
+
+<div class="app" id="app">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar" aria-label="Lesson navigation">
+    <div class="side-top">
+      <a class="brand" href="#hero">
+        <span class="logo" aria-hidden="true"><svg viewBox="0 0 40 40" width="26" height="26"><rect x="5" y="22" width="8" height="12" rx="2" fill="currentColor" opacity=".45"/><rect x="16" y="14" width="8" height="20" rx="2" fill="currentColor" opacity=".72"/><rect x="27" y="6" width="8" height="28" rx="2" fill="currentColor"/></svg></span>
+        <span class="brand-text"><strong>AP Lesson</strong><small>Additional Mathematics</small></span>
+      </a>
+      <button class="iconbtn collapse" id="collapseBtn" type="button" aria-label="Collapse sidebar" aria-expanded="true" aria-controls="sidebar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Sidebar sections">
+      <button class="tabbtn" role="tab" id="tab-lesson" data-tab="lesson" aria-controls="panel-lesson" aria-selected="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h10M4 19h16"/></svg><span>Lesson</span></button>
+      <button class="tabbtn" role="tab" id="tab-toolkit" data-tab="toolkit" aria-controls="panel-toolkit" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h3M8 16h3M14 12h2M14 16h2"/></svg><span>Toolkit</span></button>
+      <button class="tabbtn" role="tab" id="tab-settings" data-tab="settings" aria-controls="panel-settings" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg><span>Settings</span></button>
+    </div>
+    <div class="panels">
+      <section class="panel" role="tabpanel" id="panel-lesson" aria-labelledby="tab-lesson">
+        <nav class="nav" id="nav">
+      <a href="#hero" data-step="0"><span class="num">0</span><span class="lbl">Welcome<small>Objectives</small></span></a>
+      <a href="#review" data-step="1"><span class="num">1</span><span class="lbl">Review<small>Minutes 0&ndash;3</small></span></a>
+      <a href="#hook" data-step="2"><span class="num">2</span><span class="lbl">Prize-Giving hook<small>Minutes 3&ndash;8</small></span></a>
+      <a href="#diff" data-step="3"><span class="num">3</span><span class="lbl">Common difference<small>Minutes 8&ndash;15</small></span></a>
+      <a href="#builder" data-step="4"><span class="num">4</span><span class="lbl">Straw builder<small>Minutes 15&ndash;35</small></span></a>
+      <a href="#formula" data-step="5"><span class="num">5</span><span class="lbl">Derive the formula<small>Minutes 35&ndash;45</small></span></a>
+      <a href="#apply" data-step="6"><span class="num">6</span><span class="lbl">Apply &amp; verify<small>Minutes 45&ndash;55</small></span></a>
+      <a href="#plenary" data-step="7"><span class="num">7</span><span class="lbl">Plenary<small>Minutes 55&ndash;60</small></span></a>
+    </nav>
+      </section>
+      <section class="panel" role="tabpanel" id="panel-toolkit" aria-labelledby="tab-toolkit" hidden>
+        <div class="kit-formula">T<sub>n</sub> = a + (n &minus; 1)d</div>
+        <dl class="kit-terms"><dt>T<sub>n</sub></dt><dd>n-th term</dd><dt>a</dt><dd>first term</dd><dt>d</dt><dd>common difference</dd><dt>n</dt><dd>position</dd></dl>
+        <form class="calc" id="calc" onsubmit="return false">
+          <h3>Try your own AP</h3>
+          <label>First term a <input type="number" id="calcA" value="4" inputmode="decimal"></label>
+          <label>Common difference d <input type="number" id="calcD" value="3" inputmode="decimal"></label>
+          <label>Position n <input type="number" id="calcN" value="10" min="1" step="1" inputmode="numeric"></label>
+          <output class="calc-out" id="calcOut" aria-live="polite"></output>
+          <p class="calc-terms muted small" id="calcTerms"></p>
+        </form>
+      </section>
+      <section class="panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" hidden>
+        <div class="sb-tools">
+        <button class="tool" id="themeBtn" type="button" aria-label="Toggle light or dark theme">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <span>Theme</span>
+        </button>
+        <button class="tool" id="qualityBtn" type="button" aria-label="Switch 3D quality">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
+          <span id="qualityLabel">3D: High</span>
+        </button>
+        <button class="tool" id="fsBtn" type="button" aria-label="Toggle full screen">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          <span>Full screen</span>
+        </button>
+      </div>
+        <p class="muted small">Your theme and sidebar choices are remembered on this device.</p>
+      </section>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-progress">
+        <div class="sb-progress-top"><span>Steps completed</span><b id="doneCount">0 / 7</b></div>
+        <div class="meter"><span id="doneMeter"></span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main" id="main">
+
+    <!-- HERO -->
+    <section class="hero" id="hero" data-step="0">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="tile t1">4</span><span class="tile t2">7</span><span class="tile t3">10</span><span class="tile t4">13</span><span class="tile t5">16</span><span class="tile t6">19</span>
+      </div>
+      <div class="hero-inner">
+        <p class="eyebrow">Additional Mathematics &middot; Sequences and Series</p>
+        <h1>Arithmetic Progression: <em>from chairs to a formula</em></h1>
+        <p class="lead">Build it, count it, then discover the rule that predicts any term, even the 50th.</p>
+        <div class="hero-actions">
+          <a class="btn lg" href="#review">Start the lesson
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </a>
+          <span class="pill">60 minutes &middot; 7 steps</span>
+        </div>
+        <div class="objectives card">
+          <h2>By the end of this lesson you will be able to</h2>
+          <ul>
+            <li>Generate the terms of a number pattern from a real-life situation.</li>
+            <li>Identify the first term <b>a</b> and the common difference <b>d</b> of an AP.</li>
+            <li>Use the straw model to explain how <b>d</b> builds each term.</li>
+            <li>Derive and apply <b>T<sub>n</sub> = a + (n &minus; 1)d</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1 REVIEW -->
+    <section class="step" id="review" data-step="1">
+      <header class="step-head reveal">
+        <span class="tag">Step 1 &middot; Review of previous knowledge</span>
+        <h2>What comes next?</h2>
+      </header>
+      <div class="card reveal check-root" id="r1">
+        <div class="seqrow">
+          <span class="chip">2</span><span class="chip">4</span><span class="chip">6</span><span class="chip">8</span>
+          <input class="ans" data-ans="10" inputmode="numeric" aria-label="Fifth number" placeholder="?">
+          <input class="ans" data-ans="12" inputmode="numeric" aria-label="Sixth number" placeholder="?">
+          <span class="chip ghost">&hellip;</span>
+        </div>
+        <div class="row"><button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="Yes! 10 and 12." data-no="Look at how much each number grows by."></p>
+      </div>
+      <div class="card reveal">
+        <h3>An ordered list of numbers that follows a rule is called a&hellip;</h3>
+        <div class="choices" id="c1" data-correct="Sequence">
+          <button class="choice" type="button">Sequence</button><button class="choice" type="button">Equation</button><button class="choice" type="button">Function</button><button class="choice" type="button">Fraction</button>
+        </div>
+        <p class="fb"></p>
+        <div class="callout green" id="s1done" hidden><b>Today</b> we grow this idea into <b>Sequences and Series</b>, starting with the <b>Arithmetic Progression (AP)</b>.</div>
+      </div>
+    </section>
+
+    <!-- 2 HOOK (scroll-driven 3D) -->
+    <section class="step" id="hook" data-step="2">
+      <header class="step-head reveal">
+        <span class="tag">Step 2 &middot; Real-world hook</span>
+        <h2>Prize-Giving Day: arranging chairs</h2>
+        <p>Scroll slowly and watch the rows go in. Then talk with your group: <b>how many chairs will be on Row 10?</b></p>
+      </header>
+
+      <div class="scrolly" id="hallScrolly">
+        <div class="sticky">
+          <canvas id="hallCanvas" aria-label="3D view of an assembly hall with rows of chairs"></canvas>
+          <div class="gl-fallback" hidden><p><b>3D view unavailable on this device.</b><br>Row 1 has 4 chairs, Row 2 has 7, Row 3 has 10. Keep going!</p></div>
+          <div class="hud-top">
+            <span class="pill glass">Row 1 &rarr; 4</span>
+            <span class="pill glass" data-hall-chip="2">Row 2 &rarr; 7</span>
+            <span class="pill glass" data-hall-chip="3">Row 3 &rarr; 10</span>
+            <span class="pill glass gold" data-hall-chip="4">Row 10 &rarr; ?</span>
+          </div>
+          <div class="capstack" id="hallCaps">
+            <article class="cap" data-phase="0"><h3>Speech &amp; Prize-Giving Day</h3><p>The school hall is being prepared. We must arrange chairs in rows facing the stage.</p><p class="hint">Scroll down &darr;</p></article>
+            <article class="cap" data-phase="1"><h3>Row 1: 4 chairs</h3><p>The first row is nearest the stage.</p></article>
+            <article class="cap" data-phase="2"><h3>Row 2: 7 chairs</h3><p>Three more chairs than Row 1.</p></article>
+            <article class="cap" data-phase="3"><h3>Row 3: 10 chairs</h3><p>Three more again. The pattern is steady.</p></article>
+            <article class="cap" data-phase="4"><h3>Row 10: how many?</h3><p>The same rule continues. Discuss with your group for 2 minutes.</p></article>
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal check-root" id="r2">
+        <h3>Your group&rsquo;s answer</h3>
+        <div class="row">Chairs on Row 10: <input class="ans wide" data-ans="31" inputmode="numeric" aria-label="Chairs on row 10" placeholder="?"> <button class="btn check" type="button">Check</button> <button class="btn ghost" id="countOutBtn" type="button">Write them out</button></div>
+        <p class="fb" data-ok="31 chairs. But look how long that took&hellip;" data-no="Not yet. Tap &ldquo;Write them out&rdquo; and count row by row."></p>
+        <div class="seqrow" id="countOut"></div>
+        <div class="callout gold" id="s2done" hidden>Writing 10 numbers is tiring. <b>What about Row 50?</b> There must be a faster way, and we are about to find it.</div>
+      </div>
+    </section>
+
+    <!-- 3 COMMON DIFFERENCE -->
+    <section class="step" id="diff" data-step="3">
+      <header class="step-head reveal">
+        <span class="tag">Step 3 &middot; Formalising the AP</span>
+        <h2>What is added each time?</h2>
+      </header>
+      <div class="card reveal check-root" id="r3">
+        <div class="tcards">
+          <div class="tcard"><small>T<sub>1</sub></small><b>4</b></div>
+          <div class="arrow"><span>+</span><input class="ans sm" data-ans="3" inputmode="numeric" aria-label="First difference" placeholder="?"></div>
+          <div class="tcard"><small>T<sub>2</sub></small><b>7</b></div>
+          <div class="arrow"><span>+</span><input class="ans sm" data-ans="3" inputmode="numeric" aria-label="Second difference" placeholder="?"></div>
+          <div class="tcard"><small>T<sub>3</sub></small><b>10</b></div>
+        </div>
+        <div class="row"><button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="Yes! The same amount, +3, every time." data-no="Subtract each term from the one after it."></p>
+      </div>
+      <div id="s3def" hidden>
+        <div class="callout reveal"><b>Common difference (d):</b> the fixed amount added to get from one term to the next. Here <b>d = 3</b>.</div>
+        <div class="callout gold reveal"><b>Arithmetic Progression (AP):</b> a sequence in which each term differs from the one before it by the <b>same constant</b>, the common difference <b>d</b>. The first term is called <b>a</b>.</div>
+        <div class="card reveal">
+          <h3>Is it an AP? If yes, what is d?</h3>
+          <div id="apitems"></div>
+          <div class="row"><button class="btn" id="apCheck" type="button">Check my answers</button></div>
+          <p class="fb" id="apFb"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 BUILDER -->
+    <section class="step" id="builder" data-step="4">
+      <header class="step-head reveal">
+        <span class="tag">Step 4 &middot; Hands-on discovery</span>
+        <h2>Build the straw squares</h2>
+        <p>First watch the board grow as you scroll. Then it is your turn to build and fill in the table.</p>
+      </header>
+
+      <div class="scrolly tall" id="strawScrolly">
+        <div class="sticky">
+          <canvas id="cvGuide" aria-label="3D straw squares on a board"></canvas>
+          <div class="gl-fallback" hidden><p><b>3D view unavailable on this device.</b><br>Use physical straws or the paper board, then fill in the table below.</p></div>
+          <div class="hud-top">
+            <span class="pill glass">n = <b id="gN">1</b></span>
+            <span class="pill glass gold">Straws: <b id="gCnt">4</b></span>
+          </div>
+          <div class="capstack" id="gCaps">
+            <article class="cap" data-n="1"><h3>Term 1: one square</h3><p>Four straws make a closed square. So <b>a = 4</b>.</p><p class="hint">Keep scrolling &darr;</p></article>
+            <article class="cap" data-n="2"><h3>Term 2: add one square</h3><p>The new square shares a side, so only <b>3</b> new straws: 4 + 3 = <b>7</b>.</p></article>
+            <article class="cap" data-n="3"><h3>Term 3</h3><p>Another 3 straws: 7 + 3 = <b>10</b>.</p></article>
+            <article class="cap" data-n="4"><h3>Term 4</h3><p>Again 3 more: 10 + 3 = <b>13</b>.</p></article>
+            <article class="cap" data-n="5"><h3>Term 5</h3><p>13 + 3 = <b>16</b>. Each new colour shows the +3.</p></article>
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal" id="freeplay">
+        <h3>Your turn</h3>
+        <div class="split">
+          <div>
+            <div class="stagebox">
+              <canvas id="cv1" aria-label="Interactive 3D straw board"></canvas>
+              <div class="gl-fallback" hidden><p><b>3D view unavailable.</b> Use straws or the paper board.</p></div>
+              <div class="hud-top">
+                <span class="pill glass">n = <b id="n1">1</b></span>
+                <span class="pill glass gold" id="cntPill1">Straws: <b id="cnt1">4</b></span>
+              </div>
+            </div>
+            <div class="ctl">
+              <button class="btn sm" id="m1" type="button">&minus; Term</button>
+              <button class="btn sm gold" id="p1" type="button">+ Term</button>
+              <input type="range" id="rg1" min="1" max="50" value="1" aria-label="Number of terms">
+            </div>
+            <div class="ctl">
+              <button class="btn ghost sm" id="zi1" type="button">Zoom +</button>
+              <button class="btn ghost sm" id="zo1" type="button">Zoom &minus;</button>
+              <button class="btn ghost sm" id="rs1" type="button">Reset view</button>
+              <label class="check-label"><input type="checkbox" id="sh1" checked> show count</label>
+            </div>
+            <p class="muted small">Drag to rotate &middot; two fingers to zoom and move &middot; each new colour is the straws added for that term.</p>
+          </div>
+          <div class="check-root" id="r4">
+            <ol class="steps-list">
+              <li>Build <b>1 square</b> and count the straws.</li>
+              <li>Tap <b>+ Term</b>. How many straws were added?</li>
+              <li>Fill in the table and check each row on the model.</li>
+            </ol>
+            <table class="t">
+              <thead><tr><th>Position (n)</th><th>Straws (T<sub>n</sub>)</th><th>Added (d)</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><input class="ans" data-ans="4" inputmode="numeric" aria-label="T1"></td><td>&mdash;</td></tr>
+                <tr><td>2</td><td><input class="ans" data-ans="7" inputmode="numeric" aria-label="T2"></td><td><input class="ans" data-ans="3" inputmode="numeric" aria-label="d2"></td></tr>
+                <tr><td>3</td><td><input class="ans" data-ans="10" inputmode="numeric" aria-label="T3"></td><td><input class="ans" data-ans="3" inputmode="numeric" aria-label="d3"></td></tr>
+                <tr><td>4</td><td><input class="ans" data-ans="13" inputmode="numeric" aria-label="T4"></td><td><input class="ans" data-ans="3" inputmode="numeric" aria-label="d4"></td></tr>
+                <tr><td>5</td><td><input class="ans" data-ans="16" inputmode="numeric" aria-label="T5"></td><td><input class="ans" data-ans="3" inputmode="numeric" aria-label="d5"></td></tr>
+              </tbody>
+            </table>
+            <div class="row"><button class="btn check" type="button">Check table</button></div>
+            <p class="fb" data-ok="The table is complete. The first term is a = 4 and d = 3." data-no="Check the red boxes against the straws on the model."></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 FORMULA -->
+    <section class="step" id="formula" data-step="5">
+      <header class="step-head reveal">
+        <span class="tag">Step 5 &middot; Deriving the formula</span>
+        <h2>How many times do we add d?</h2>
+        <p>We know <b>a = 4</b> and <b>d = 3</b>. Write each term as <b>4 + (&nbsp;&nbsp;) &times; 3</b>.</p>
+      </header>
+      <div class="card reveal check-root" id="r5">
+        <table class="t narrow">
+          <thead><tr><th>Position (n)</th><th>T<sub>n</sub> written with a and d</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><div class="struct">4 + <input class="ans sm" data-ans="0" inputmode="numeric" aria-label="times for n=1"> &times; 3</div></td></tr>
+            <tr><td>2</td><td><div class="struct">4 + <input class="ans sm" data-ans="1" inputmode="numeric" aria-label="times for n=2"> &times; 3</div></td></tr>
+            <tr><td>3</td><td><div class="struct">4 + <input class="ans sm" data-ans="2" inputmode="numeric" aria-label="times for n=3"> &times; 3</div></td></tr>
+            <tr><td>4</td><td><div class="struct">4 + <input class="ans sm" data-ans="3" inputmode="numeric" aria-label="times for n=4"> &times; 3</div></td></tr>
+            <tr><td>5</td><td><div class="struct">4 + <input class="ans sm" data-ans="4" inputmode="numeric" aria-label="times for n=5"> &times; 3</div></td></tr>
+            <tr><td>10</td><td><div class="struct">4 + <input class="ans sm" data-ans="9" inputmode="numeric" aria-label="times for n=10"> &times; 3</div></td></tr>
+            <tr><td><b>n</b></td><td><div class="struct">a + <input class="ans wide" data-ans="n-1" aria-label="times for n" placeholder="?"> &times; d</div></td></tr>
+          </tbody>
+        </table>
+        <div class="row"><button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="Yes! The number of times we add d is always one less than the position." data-no="Hint: for position 2 we add d once, for position 3 twice. How are n and the count linked?"></p>
+      </div>
+      <div id="formulaBox" hidden>
+        <div class="formula">T<sub>n</sub> = a + (n &minus; 1)d</div>
+        <div class="callout green"><b>T<sub>n</sub></b> is the n-th term &middot; <b>a</b> is the first term &middot; <b>d</b> is the common difference &middot; <b>n</b> is the position.</div>
+      </div>
+    </section>
+
+    <!-- 6 APPLY -->
+    <section class="step" id="apply" data-step="6">
+      <header class="step-head reveal">
+        <span class="tag">Step 6 &middot; Application &amp; verification</span>
+        <h2>Back to Prize-Giving Day</h2>
+        <div class="formula small">T<sub>n</sub> = a + (n &minus; 1)d</div>
+      </header>
+
+      <div class="card reveal check-root" id="r6a">
+        <h3>1. Row 10 with the formula (n = 10, a = 4, d = 3)</h3>
+        <div class="eq">T<sub>10</sub> = <input class="ans" data-ans="4" inputmode="numeric" aria-label="a"> + ( <input class="ans" data-ans="9" inputmode="numeric" aria-label="n minus 1"> ) &times; <input class="ans" data-ans="3" inputmode="numeric" aria-label="d"> = <input class="ans" data-ans="31" inputmode="numeric" aria-label="T10"></div>
+        <div class="row"><button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="T10 = 31 chairs." data-no="Substitute carefully: a = 4, n &minus; 1 = 9, d = 3."></p>
+      </div>
+
+      <div class="card reveal">
+        <h3>2. Verify with the straw model</h3>
+        <p>Move the model to <b>n = 10</b>. Does the straw count match your answer?</p>
+        <div class="stagebox short">
+          <canvas id="cv2" aria-label="3D straw board for verification"></canvas>
+          <div class="gl-fallback" hidden><p><b>3D view unavailable.</b> A 10-square chain has 3 &times; 10 + 1 = 31 straws.</p></div>
+          <div class="hud-top">
+            <span class="pill glass">n = <b id="n2">3</b></span>
+            <span class="pill glass gold">Straws: <b id="cnt2">10</b></span>
+          </div>
+        </div>
+        <div class="ctl">
+          <button class="btn sm gold" id="g10" type="button">Go to n = 10</button>
+          <input type="range" id="rg2" min="1" max="50" value="3" aria-label="Number of terms">
+          <button class="btn ghost sm" id="rs2" type="button">Reset view</button>
+        </div>
+        <p class="fb" id="verifyMsg"></p>
+      </div>
+
+      <div class="card reveal check-root" id="r6b">
+        <h3>3. Now Row 50, with no counting!</h3>
+        <div class="row">T<sub>50</sub> = <input class="ans wide" data-ans="151" inputmode="numeric" aria-label="T50" placeholder="?"> <button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="151 chairs. That took seconds, not minutes!" data-no="T50 = 4 + (50 &minus; 1) &times; 3"></p>
+      </div>
+
+      <div class="card reveal check-root" id="r6c">
+        <h3>4. Practice: the AP 5, 8, 11, 14, &hellip;</h3>
+        <div class="row">Find the 15th term, T<sub>15</sub> = <input class="ans wide" data-ans="47" inputmode="numeric" aria-label="T15"></div>
+        <div class="row">Which term equals 50? n = <input class="ans wide" data-ans="16" inputmode="numeric" aria-label="n for 50"> <button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="Both correct." data-no="Here a = 5 and d = 3. For the second one solve 5 + (n &minus; 1)(3) = 50."></p>
+      </div>
+    </section>
+
+    <!-- 7 PLENARY -->
+    <section class="step" id="plenary" data-step="7">
+      <header class="step-head reveal">
+        <span class="tag">Step 7 &middot; Plenary &amp; assignment</span>
+        <h2>Quick quiz</h2>
+        <p>Look at the AP <b>7, 11, 15, 19, &hellip;</b></p>
+      </header>
+      <div class="card reveal check-root" id="r7">
+        <div class="row">First term, a = <input class="ans" data-ans="7" inputmode="numeric" aria-label="a"></div>
+        <div class="row">Common difference, d = <input class="ans" data-ans="4" inputmode="numeric" aria-label="d"></div>
+        <div class="row">15th term, T<sub>15</sub> = <input class="ans wide" data-ans="63" inputmode="numeric" aria-label="T15"> <button class="btn check" type="button">Check</button></div>
+        <p class="fb" data-ok="Excellent work!" data-no="a is the first term. d = second term &minus; first term. Use T15 = a + 14d."></p>
+      </div>
+      <div class="callout gold reveal"><b>Remember</b><br>An AP has a <b>constant common difference d</b>. &nbsp; <b>T<sub>n</sub> = a + (n &minus; 1)d</b></div>
+      <div class="card reveal">
+        <h3>Challenge (take-home)</h3>
+        <p>In an AP, T<sub>3</sub> = 11 and T<sub>7</sub> = 23. Find the first term <b>a</b>, the common difference <b>d</b>, and the expression for T<sub>n</sub>.</p>
+        <details><summary>Show hints</summary><p>Write each term with the formula: T<sub>3</sub> = a + 2d = 11 and T<sub>7</sub> = a + 6d = 23. Subtract one equation from the other to find d, then find a.</p></details>
+        <details><summary>Show answer (after you have tried!)</summary><p>d = 3, a = 5, so T<sub>n</sub> = 5 + (n &minus; 1)3 = 3n + 2.</p></details>
+      </div>
+      <footer class="site-foot">Well done, class. Press <b>Welcome</b> in the menu to start over.</footer>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="window.__noThree=1"></script>
+<script src="main.js" onerror="showErr()"></script>
+<script>function showErr(){var d=document.createElement("div");d.style.cssText="position:fixed;bottom:0;left:0;right:0;z-index:99;padding:14px;background:#c7372f;color:#fff;font:600 15px system-ui";d.textContent="Could not load main.js. Make sure main.js is in the same folder as index.html.";document.body.appendChild(d)}</script>
+</body>
+</html>
