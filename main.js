@@ -377,6 +377,7 @@ setN2(3);
    ========================================================= */
 const REQUIRED = { 1: ['r1', 'c1'], 2: ['r2'], 3: ['r3', 'apitems'], 4: ['r4'], 5: ['r5'], 6: ['r6a', 'r6b', 'r6c'], 7: ['r7'] };
 const done = new Set();
+let celebrated = false;
 const UNLOCK = { c1: 's1done', r2: 's2done', r3: 's3def', r5: 'formulaBox' };
 function mark(id) {
   done.add(id);
@@ -393,6 +394,7 @@ function mark(id) {
   $('#doneCount').textContent = `${steps} / 7`;
   $('#mobileProgress').textContent = `${steps} / 7`;
   $('#doneMeter').style.width = (steps / 7 * 100) + '%';
+  if (steps === 7 && !celebrated) { celebrated = true; setTimeout(celebrate, 700); }
 }
 const norm = s => s.trim().toLowerCase().replace(/[\u2212\u2013]/g, '-').replace(/\s+/g, '');
 const same = (v, a) => {
@@ -468,6 +470,97 @@ $('#apCheck').onclick = () => {
   fb.textContent = all ? 'All correct. An AP needs the same difference every time.' : 'Check the highlighted rows: subtract each term from the next one.';
   if (all) mark('apitems');
 };
+
+/* =========================================================
+   8b. Practice tab: random AP questions
+   ========================================================= */
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const sg = () => (Math.random() < .25 ? -1 : 1);
+const P = n => (n < 0 ? `(${n})` : n);
+const GEN = [
+  () => { const a = rnd(-5, 20), d = rnd(2, 9) * sg(), n = rnd(8, 30), ans = a + (n - 1) * d;
+    return { q: `AP: ${[0, 1, 2, 3].map(i => a + i * d).join(', ')}, &hellip; Find T<sub>${n}</sub>.`, ans,
+      how: `a = ${a}, d = ${d}<br>T<sub>${n}</sub> = ${a} + (${n} &minus; 1) &times; ${P(d)}<br>= ${a} + ${(n - 1) * d} = <b>${ans}</b>` }; },
+  () => { const a = rnd(-6, 25), d = rnd(2, 9) * sg();
+    return { q: `AP: ${[0, 1, 2, 3].map(i => a + i * d).join(', ')}, &hellip; Find the common difference d.`, ans: d,
+      how: `d = second term &minus; first term<br>d = ${a + d} &minus; ${P(a)} = <b>${d}</b>` }; },
+  () => { const a = rnd(1, 15), d = rnd(2, 8), n = rnd(10, 40), t = a + (n - 1) * d;
+    return { q: `AP: ${[0, 1, 2, 3].map(i => a + i * d).join(', ')}, &hellip; Which term equals ${t}? (find n)`, ans: n,
+      how: `a = ${a}, d = ${d}<br>${a} + (n &minus; 1) &times; ${d} = ${t}<br>(n &minus; 1) &times; ${d} = ${t - a}<br>n &minus; 1 = ${n - 1}, so n = <b>${n}</b>` }; },
+  () => { const d = rnd(2, 7), m = rnd(5, 15), a = rnd(-4, 20), t = a + (m - 1) * d;
+    return { q: `In an AP, T<sub>${m}</sub> = ${t} and d = ${d}. Find the first term a.`, ans: a,
+      how: `T<sub>${m}</sub> = a + (${m} &minus; 1)d<br>${t} = a + ${(m - 1) * d}<br>a = ${t} &minus; ${(m - 1) * d} = <b>${a}</b>` }; },
+  () => { const a = rnd(-3, 15), d = rnd(2, 8) * sg(), p = rnd(2, 5), q = p + rnd(3, 6), tp = a + (p - 1) * d, tq = a + (q - 1) * d;
+    return { q: `In an AP, T<sub>${p}</sub> = ${tp} and T<sub>${q}</sub> = ${tq}. Find the common difference d.`, ans: d,
+      how: `T<sub>${q}</sub> &minus; T<sub>${p}</sub> = (${q} &minus; ${p})d<br>${tq} &minus; ${P(tp)} = ${q - p}d<br>${tq - tp} = ${q - p}d, so d = <b>${d}</b>` }; }
+];
+let cur = null, streak = 0, best = +(store.get('ap-best') || 0), solved = +(store.get('ap-solved') || 0), lastGen = -1;
+function showStats() { $('#prStreak').textContent = streak; $('#prBest').textContent = best; $('#prSolved').textContent = solved; }
+function nextQ() {
+  let i; do { i = rnd(0, GEN.length - 1); } while (i === lastGen); lastGen = i;
+  cur = GEN[i]();
+  $('#prQ').innerHTML = cur.q; $('#prSteps').innerHTML = cur.how;
+  const a = $('#prAns'); a.value = ''; a.classList.remove('ok', 'bad');
+  $('#prFb').textContent = ''; $('#prFb').className = 'fb'; $('#prHow').open = false;
+}
+function checkQ() {
+  const a = $('#prAns'), fb = $('#prFb'), ok = same(a.value, cur.ans);
+  a.classList.remove('ok', 'bad'); void a.offsetWidth; a.classList.add(ok ? 'ok' : 'bad');
+  if (ok) {
+    streak++; solved++; best = Math.max(best, streak);
+    store.set('ap-best', best); store.set('ap-solved', solved);
+    fb.className = 'fb ok'; fb.textContent = streak > 2 ? `Correct! ${streak} in a row.` : 'Correct!';
+    $('.pr-card').classList.remove('streak-pop'); void $('.pr-card').offsetWidth; $('.pr-card').classList.add('streak-pop');
+    $('#prNext').focus({ preventScroll: true });
+  } else if (a.value.trim()) {
+    streak = 0; fb.className = 'fb bad'; fb.textContent = 'Not yet. Try again or tap Show me how.';
+  }
+  showStats();
+}
+$('#prCheck').onclick = checkQ;
+$('#prNext').onclick = () => { nextQ(); $('#prAns').focus({ preventScroll: true }); };
+$('#prAns').addEventListener('keydown', e => { if (e.key === 'Enter') checkQ(); });
+nextQ(); showStats();
+
+/* =========================================================
+   8c. Celebration, certificate, install, offline
+   ========================================================= */
+function confetti() {
+  if (reduce) return;
+  const c = $('#confetti'), x = c.getContext('2d'); c.hidden = false;
+  c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#0b6e4f', '#f0b429', '#2563b8', '#c7372f', '#8e44ad', '#2fb384'];
+  const ps = Array.from({ length: 150 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * .5, vx: (Math.random() - .5) * 4, vy: 2 + Math.random() * 4, s: 6 + Math.random() * 7, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: cols[rnd(0, cols.length - 1)] }));
+  const t0 = performance.now();
+  (function f(t) {
+    x.clearRect(0, 0, c.width, c.height);
+    ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); x.restore(); });
+    if (t - t0 < 3800) requestAnimationFrame(f); else c.hidden = true;
+  })(t0);
+}
+const dlg = $('#complete');
+function openCert() {
+  $('#certLine').textContent = `Completed Arithmetic Progression, 7 of 7 steps` + (solved ? `, ${solved} practice question${solved === 1 ? '' : 's'} solved` : '') + ` on ${new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}.`;
+  $('#certName').value = store.get('ap-name') || '';
+  dlg.hidden = false; $('#certBtn').hidden = false; $('#certName').focus({ preventScroll: true });
+}
+function celebrate() { confetti(); openCert(); }
+$('#certClose').onclick = () => { dlg.hidden = true; };
+$('#certBtn').onclick = openCert;
+$('#certName').addEventListener('input', e => store.set('ap-name', e.target.value));
+$('#certPrint').onclick = () => {
+  document.body.classList.add('print-cert');
+  setTimeout(() => { window.print(); document.body.classList.remove('print-cert'); }, 50);
+};
+addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) dlg.hidden = true; });
+
+let installEvt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('#installBtn').hidden = false; });
+$('#installBtn').onclick = async () => { if (!installEvt) return; installEvt.prompt(); await installEvt.userChoice; installEvt = null; $('#installBtn').hidden = true; };
+addEventListener('appinstalled', () => { $('#installBtn').hidden = true; });
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
 
 /* =========================================================
    9. Start

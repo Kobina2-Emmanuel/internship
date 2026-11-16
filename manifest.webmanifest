@@ -1,0 +1,30 @@
+{
+  "name": "Arithmetic Progression Lesson",
+  "short_name": "AP Lesson",
+  "description": "Interactive Additional Mathematics lesson on Arithmetic Progression",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b6e4f",
+  "theme_color": "#0b6e4f",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
